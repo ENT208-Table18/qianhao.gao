@@ -1,85 +1,135 @@
 <template>
   <view class="page">
-    <view class="bg-glow bg-glow-a"></view>
-    <view class="bg-glow bg-glow-b"></view>
+    <!-- Background decorations -->
+    <view class="bg-blur bg-blur-1"></view>
+    <view class="bg-blur bg-blur-2"></view>
+    <view class="bg-blur bg-blur-3"></view>
+    
+    <!-- Decorative icons -->
+    <image class="deco-icon deco-star-1" :src="assets.star1" mode="aspectFit"></image>
+    <image class="deco-icon deco-star-2" :src="assets.star2" mode="aspectFit"></image>
+    <image class="deco-icon deco-star-3" :src="assets.star3" mode="aspectFit"></image>
+    
+    <!-- Bottom gradient overlay -->
+    <view class="bottom-overlay"></view>
 
+    <!-- Main Card -->
     <view class="auth-card">
-      <view class="brand-icon">
-        <text class="icon-inner">◎</text>
-      </view>
-      <text class="title">旅行大富翁</text>
-      <text class="subtitle">记录你的足迹，点亮世界地图</text>
-
-      <view class="mode-switch">
-        <view class="mode-track" :class="{ right: mode === 'register' }"></view>
-        <view class="mode-item" :class="{ active: mode === 'login' }" @click="switchMode('login')">
-          登录
+      <!-- Header -->
+      <view class="header">
+        <view class="brand-icon">
+          <image class="brand-icon-img" :src="assets.location" mode="aspectFit"></image>
         </view>
-        <view class="mode-item" :class="{ active: mode === 'register' }" @click="switchMode('register')">
-          注册
-        </view>
+        <text class="title">旅行大富翁</text>
+        <text class="subtitle">记录你的足迹，点亮世界地图</text>
       </view>
 
-      <view class="form-wrap" :class="{ 'is-register': mode === 'register', animated: animating }">
-        <view class="input-item" :class="{ focused: focusedField === 'email' }">
-          <text class="input-icon">✉</text>
-          <input
-            class="input"
-            type="text"
-            v-model.trim="form.email"
-            placeholder="your@email.com"
-            @focus="focusedField = 'email'"
-            @blur="focusedField = ''"
-          />
+      <!-- Tab Switch -->
+      <view class="tab-list">
+        <view 
+          class="tab" 
+          :class="{ active: mode === 'login' }" 
+          @click="switchMode('login')"
+        >
+          <text class="tab-text">登录</text>
         </view>
-
-        <view class="input-item" :class="{ focused: focusedField === 'password' }">
-          <text class="input-icon">🔒</text>
-          <input
-            class="input"
-            :password="!showPassword"
-            v-model="form.password"
-            placeholder="请输入密码"
-            @focus="focusedField = 'password'"
-            @blur="focusedField = ''"
-          />
-          <text class="eye-btn" @click="showPassword = !showPassword">{{ showPassword ? '🙈' : '👁' }}</text>
-        </view>
-
-        <view class="input-item extra-field" :class="{ focused: focusedField === 'confirm' }">
-          <text class="input-icon">🔐</text>
-          <input
-            class="input"
-            :password="!showConfirm"
-            v-model="form.confirmPassword"
-            placeholder="请再次输入密码"
-            @focus="focusedField = 'confirm'"
-            @blur="focusedField = ''"
-          />
-          <text class="eye-btn" @click="showConfirm = !showConfirm">{{ showConfirm ? '🙈' : '👁' }}</text>
+        <view 
+          class="tab" 
+          :class="{ active: mode === 'register' }" 
+          @click="switchMode('register')"
+        >
+          <text class="tab-text">注册</text>
         </view>
       </view>
 
-      <button class="submit-btn" :disabled="loading" @click="submit">
-        {{ loading ? '处理中...' : mode === 'login' ? '登录' : '注册' }}
-      </button>
+      <!-- Form -->
+      <view class="form">
+        <!-- Email Field -->
+        <view class="field">
+          <text class="label">邮箱</text>
+          <view class="input-wrap" :class="{ focused: focusedField === 'email' }">
+            <image class="input-icon" :src="assets.email" mode="aspectFit"></image>
+            <input
+              class="input"
+              type="text"
+              v-model="form.email"
+              placeholder="your@email.com"
+              placeholder-class="placeholder"
+              @focus="focusedField = 'email'"
+              @blur="focusedField = ''"
+            />
+          </view>
+        </view>
 
-      <text class="forget-text" @click="onForgot">忘记密码?</text>
+        <!-- Password Field -->
+        <view class="field">
+          <text class="label">密码</text>
+          <view class="input-wrap" :class="{ focused: focusedField === 'password' }">
+            <image class="input-icon" :src="assets.lock" mode="aspectFit"></image>
+            <input
+              class="input"
+              :password="!showPassword"
+              v-model="form.password"
+              placeholder="••••••••"
+              placeholder-class="placeholder"
+              @focus="focusedField = 'password'"
+              @blur="focusedField = ''"
+            />
+            <text class="eye-btn" @click="showPassword = !showPassword">
+              {{ showPassword ? '🙈' : '👁' }}
+            </text>
+          </view>
+        </view>
 
+        <!-- Confirm Password Field (Register only) -->
+        <view class="field confirm-field" :class="{ show: mode === 'register' }">
+          <text class="label">确认密码</text>
+          <view class="input-wrap" :class="{ focused: focusedField === 'confirm' }">
+            <image class="input-icon" :src="assets.lock" mode="aspectFit"></image>
+            <input
+              class="input"
+              :password="!showConfirm"
+              v-model="form.confirmPassword"
+              placeholder="••••••••"
+              placeholder-class="placeholder"
+              @focus="focusedField = 'confirm'"
+              @blur="focusedField = ''"
+            />
+            <text class="eye-btn" @click="showConfirm = !showConfirm">
+              {{ showConfirm ? '🙈' : '👁' }}
+            </text>
+          </view>
+        </view>
+
+        <!-- Submit Button -->
+        <button class="submit-btn" :disabled="loading" @click="submit">
+          <text class="submit-text">
+            {{ loading ? '处理中...' : mode === 'login' ? '登录' : '注册' }}
+          </text>
+        </button>
+
+        <!-- Forgot Password -->
+        <text class="forgot-link" @click="onForgot">忘记密码？</text>
+      </view>
+
+      <!-- Divider -->
       <view class="divider">
-        <view class="line"></view>
-        <text class="divider-text">或使用第三方登录</text>
-        <view class="line"></view>
+        <view class="divider-line"></view>
+        <view class="divider-text-wrap">
+          <text class="divider-text">或使用第三方登录</text>
+        </view>
+        <view class="divider-line"></view>
       </view>
 
+      <!-- Social Login -->
       <view class="social-row">
-        <view class="social-btn">
-          <text class="social-icon fb">f</text>
-          <text>Facebook</text>
+        <view class="social-btn" @click="onSocialLogin('facebook')">
+          <image class="social-icon" :src="assets.facebook" mode="aspectFit"></image>
+          <text class="social-text">Facebook</text>
         </view>
-        <view class="social-btn">
-          <text class="social-icon dc">◉</text>
-          <text>Discord</text>
+        <view class="social-btn" @click="onSocialLogin('discord')">
+          <image class="social-icon" :src="assets.discord" mode="aspectFit"></image>
+          <text class="social-text">Discord</text>
         </view>
       </view>
     </view>
@@ -87,11 +137,12 @@
 </template>
 
 <script>
+import designSystem from '@/design-system.json'
+
 export default {
   data() {
     return {
       mode: 'login',
-      animating: false,
       loading: false,
       focusedField: '',
       showPassword: false,
@@ -101,16 +152,19 @@ export default {
         password: '',
         confirmPassword: '',
       },
+      assets: designSystem.assets.icons,
+    }
+  },
+  onLoad() {
+    this.assets = {
+      ...designSystem.assets.icons,
+      ...designSystem.assets.decorations,
     }
   },
   methods: {
     switchMode(nextMode) {
       if (this.mode === nextMode) return
       this.mode = nextMode
-      this.animating = false
-      setTimeout(() => {
-        this.animating = true
-      }, 10)
       if (nextMode === 'login') {
         this.form.confirmPassword = ''
       }
@@ -120,6 +174,7 @@ export default {
     },
     submit() {
       const { email, password, confirmPassword } = this.form
+      
       if (!this.isValidEmail(email)) {
         uni.showToast({ title: '请输入正确邮箱', icon: 'none' })
         return
@@ -140,10 +195,16 @@ export default {
           title: this.mode === 'login' ? '登录成功' : '注册成功',
           icon: 'success',
         })
+        setTimeout(() => {
+          uni.redirectTo({ url: '/pages/map/map' })
+        }, 500)
       }, 900)
     },
     onForgot() {
-      uni.showToast({ title: '演示页：可接入找回密码流程', icon: 'none' })
+      uni.showToast({ title: '可接入找回密码流程', icon: 'none' })
+    },
+    onSocialLogin(platform) {
+      uni.showToast({ title: `${platform} 登录演示`, icon: 'none' })
     },
   },
 }
@@ -152,291 +213,338 @@ export default {
 <style>
 .page {
   min-height: 100vh;
-  padding: 56rpx 34rpx;
-  box-sizing: border-box;
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 32rpx;
+  box-sizing: border-box;
   position: relative;
   overflow: hidden;
-  background: linear-gradient(165deg, #5d7cf4 0%, #7f54ed 44%, #bf3ba7 100%);
+  background: linear-gradient(115deg, #51a2ff 0%, #ad46ff 50%, #f6339a 100%);
 }
 
-.bg-glow {
+/* Background blur decorations */
+.bg-blur {
   position: absolute;
-  width: 420rpx;
-  height: 420rpx;
   border-radius: 50%;
-  filter: blur(46rpx);
-  opacity: 0.28;
+  filter: blur(48rpx);
 }
 
-.bg-glow-a {
-  top: -120rpx;
-  right: -100rpx;
-  background: #d9dcff;
+.bg-blur-1 {
+  width: 256rpx;
+  height: 160rpx;
+  left: 80rpx;
+  top: 160rpx;
+  background: rgba(255, 255, 255, 0.2);
+  opacity: 0.86;
 }
 
-.bg-glow-b {
-  bottom: -160rpx;
-  left: -120rpx;
-  background: #ffd0e9;
+.bg-blur-2 {
+  width: 320rpx;
+  height: 192rpx;
+  left: 306rpx;
+  top: 320rpx;
+  background: rgba(255, 255, 255, 0.15);
 }
 
+.bg-blur-3 {
+  width: 288rpx;
+  height: 176rpx;
+  left: 196rpx;
+  bottom: 200rpx;
+  background: rgba(255, 255, 255, 0.1);
+  opacity: 0.87;
+}
+
+/* Decorative icons */
+.deco-icon {
+  position: absolute;
+  pointer-events: none;
+}
+
+.deco-star-1 {
+  width: 64rpx;
+  height: 64rpx;
+  right: 100rpx;
+  top: 280rpx;
+}
+
+.deco-star-2 {
+  width: 80rpx;
+  height: 80rpx;
+  left: 200rpx;
+  top: 720rpx;
+  transform: rotate(150deg);
+}
+
+.deco-star-3 {
+  width: 48rpx;
+  height: 48rpx;
+  right: 120rpx;
+  top: 560rpx;
+}
+
+/* Bottom overlay */
+.bottom-overlay {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 192rpx;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.2), transparent);
+}
+
+/* Auth Card */
 .auth-card {
   width: 100%;
-  max-width: 640rpx;
-  background: #f4f3f8;
+  max-width: 720rpx;
+  background: rgba(255, 255, 255, 0.95);
   border-radius: 28rpx;
-  padding: 42rpx 34rpx 34rpx;
-  box-shadow: 0 24rpx 60rpx rgba(40, 24, 93, 0.22);
+  padding: 64rpx;
+  box-shadow: 0 50rpx 100rpx rgba(0, 0, 0, 0.25);
   position: relative;
-  z-index: 3;
+  z-index: 10;
+}
+
+/* Header */
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 48rpx;
 }
 
 .brand-icon {
-  width: 104rpx;
-  height: 104rpx;
-  margin: 0 auto 20rpx;
+  width: 128rpx;
+  height: 128rpx;
   border-radius: 50%;
-  background: linear-gradient(135deg, #4d7cf4 0%, #9455eb 100%);
+  background: linear-gradient(90deg, #2b7fff 0%, #ad46ff 100%);
   display: flex;
   justify-content: center;
   align-items: center;
-  box-shadow: 0 10rpx 24rpx rgba(93, 106, 237, 0.35);
+  margin-bottom: 32rpx;
 }
 
-.icon-inner {
-  color: #fff;
-  font-size: 40rpx;
-  font-weight: 700;
+.brand-icon-img {
+  width: 64rpx;
+  height: 64rpx;
 }
 
 .title {
-  display: block;
+  font-size: 60rpx;
+  font-weight: 700;
+  color: #1e2939;
+  line-height: 72rpx;
   text-align: center;
-  font-size: 62rpx;
-  line-height: 1.2;
-  color: #1f2537;
-  font-weight: 800;
 }
 
 .subtitle {
-  display: block;
+  font-size: 32rpx;
+  color: #4a5565;
+  line-height: 48rpx;
+  margin-top: 16rpx;
   text-align: center;
-  margin-top: 10rpx;
-  font-size: 30rpx;
-  color: #656b78;
 }
 
-.mode-switch {
-  position: relative;
-  margin-top: 34rpx;
-  border-radius: 40rpx;
-  background: #dfdee5;
-  height: 72rpx;
-  padding: 6rpx;
+/* Tab List */
+.tab-list {
   display: flex;
+  background: #ececf0;
+  border-radius: 28rpx;
+  padding: 6rpx;
+  margin-bottom: 48rpx;
 }
 
-.mode-track {
-  position: absolute;
-  top: 6rpx;
-  left: 6rpx;
-  width: calc(50% - 6rpx);
-  height: 60rpx;
-  border-radius: 30rpx;
-  background: #ffffff;
-  box-shadow: 0 6rpx 12rpx rgba(67, 56, 202, 0.1);
-  transition: transform 280ms cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.mode-track.right {
-  transform: translateX(100%);
-}
-
-.mode-item {
+.tab {
   flex: 1;
-  z-index: 2;
-  text-align: center;
-  line-height: 60rpx;
-  color: #5d6573;
-  font-size: 30rpx;
-  font-weight: 600;
-  transition: color 220ms ease;
+  height: 58rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 28rpx;
+  transition: all 220ms ease;
 }
 
-.mode-item.active {
-  color: #1f2537;
+.tab.active {
+  background: #ffffff;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.08);
 }
 
-.form-wrap {
-  margin-top: 28rpx;
+.tab-text {
+  font-size: 28rpx;
+  font-weight: 500;
+  color: #0a0a0a;
 }
 
-.input-item {
-  height: 84rpx;
-  border-radius: 18rpx;
-  background: #ececf1;
-  margin-bottom: 18rpx;
+/* Form */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 32rpx;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.confirm-field {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  transition: all 300ms ease;
+}
+
+.confirm-field.show {
+  max-height: 200rpx;
+  opacity: 1;
+}
+
+.label {
+  font-size: 28rpx;
+  font-weight: 500;
+  color: #0a0a0a;
+  line-height: 28rpx;
+}
+
+.input-wrap {
+  height: 72rpx;
+  background: #f3f3f5;
+  border-radius: 16rpx;
   display: flex;
   align-items: center;
-  padding: 0 20rpx;
+  padding: 0 24rpx;
   border: 2rpx solid transparent;
-  transition: border-color 220ms ease, box-shadow 220ms ease, transform 220ms ease;
+  transition: all 220ms ease;
 }
 
-.input-item.focused {
-  border-color: #8f81f3;
-  box-shadow: 0 0 0 6rpx rgba(121, 96, 234, 0.12);
-  transform: translateY(-2rpx);
+.input-wrap.focused {
+  border-color: #2b7fff;
+  box-shadow: 0 0 0 6rpx rgba(43, 127, 255, 0.12);
 }
 
 .input-icon {
-  width: 36rpx;
-  text-align: center;
-  color: #8e95a5;
-  font-size: 30rpx;
+  width: 32rpx;
+  height: 32rpx;
+  margin-right: 16rpx;
+  flex-shrink: 0;
 }
 
 .input {
   flex: 1;
   height: 100%;
-  margin-left: 14rpx;
   font-size: 32rpx;
-  color: #2a3140;
+  color: #0a0a0a;
+  background: transparent;
+}
+
+.placeholder {
+  color: #717182;
 }
 
 .eye-btn {
-  font-size: 30rpx;
-  color: #8e95a5;
-  padding: 6rpx;
+  font-size: 32rpx;
+  padding: 8rpx;
+  margin-left: 8rpx;
 }
 
-.extra-field {
-  max-height: 0;
-  opacity: 0;
-  margin-bottom: 0;
-  overflow: hidden;
-  transform: translateY(-6rpx);
-  transition: max-height 300ms ease, opacity 240ms ease, margin-bottom 240ms ease, transform 280ms ease;
-}
-
-.is-register .extra-field {
-  max-height: 84rpx;
-  opacity: 1;
-  margin-bottom: 18rpx;
-  transform: translateY(0);
-}
-
-.animated .input-item {
-  animation: slideInUp 320ms ease both;
-}
-
-.animated .input-item:nth-child(2) {
-  animation-delay: 70ms;
-}
-
-.animated .input-item:nth-child(3) {
-  animation-delay: 130ms;
-}
-
+/* Submit Button */
 .submit-btn {
-  margin-top: 10rpx;
-  width: 100%;
-  height: 86rpx;
-  border-radius: 18rpx;
+  height: 88rpx;
+  background: linear-gradient(90deg, #2b7fff 0%, #ad46ff 100%);
+  border-radius: 16rpx;
   border: none;
-  background: linear-gradient(135deg, #4f79f2 0%, #9a4fea 100%);
-  color: #fff;
-  font-size: 34rpx;
-  font-weight: 700;
-  transition: transform 200ms ease, opacity 200ms ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 16rpx;
+  transition: all 200ms ease;
 }
 
 .submit-btn:active {
   transform: scale(0.98);
+  opacity: 0.9;
 }
 
 .submit-btn[disabled] {
-  opacity: 0.86;
+  opacity: 0.7;
 }
 
-.forget-text {
-  margin-top: 20rpx;
-  display: block;
+.submit-text {
+  font-size: 28rpx;
+  font-weight: 500;
+  color: #ffffff;
+}
+
+/* Forgot Link */
+.forgot-link {
+  font-size: 28rpx;
+  color: #2b7fff;
   text-align: center;
-  color: #6e7fa9;
-  font-size: 30rpx;
+  line-height: 40rpx;
 }
 
+/* Divider */
 .divider {
-  margin-top: 22rpx;
   display: flex;
   align-items: center;
-  gap: 12rpx;
+  margin: 32rpx 0;
+  position: relative;
 }
 
-.line {
+.divider-line {
   flex: 1;
-  height: 1px;
-  background: #dddce3;
+  height: 2rpx;
+  background: #e5e7eb;
+}
+
+.divider-text-wrap {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 0 16rpx;
 }
 
 .divider-text {
-  color: #767d8d;
   font-size: 28rpx;
+  color: #6a7282;
+  white-space: nowrap;
 }
 
+/* Social Login */
 .social-row {
-  margin-top: 20rpx;
   display: flex;
-  gap: 16rpx;
+  gap: 24rpx;
 }
 
 .social-btn {
   flex: 1;
-  height: 78rpx;
-  border-radius: 14rpx;
-  border: 2rpx solid #e1e2e9;
-  background: #f7f7fa;
+  height: 72rpx;
+  background: #ffffff;
+  border: 2rpx solid rgba(0, 0, 0, 0.1);
+  border-radius: 16rpx;
   display: flex;
-  align-items: center;
   justify-content: center;
-  gap: 10rpx;
-  color: #2b3443;
-  font-size: 30rpx;
-  transition: transform 200ms ease, box-shadow 200ms ease;
+  align-items: center;
+  gap: 16rpx;
+  transition: all 200ms ease;
 }
 
 .social-btn:active {
-  transform: translateY(1rpx);
-  box-shadow: 0 6rpx 14rpx rgba(79, 70, 229, 0.12);
+  background: #f8f8f8;
+  transform: scale(0.98);
 }
 
 .social-icon {
-  width: 34rpx;
-  text-align: center;
-  font-size: 30rpx;
-  font-weight: 700;
+  width: 32rpx;
+  height: 32rpx;
 }
 
-.social-icon.fb {
-  color: #3b5998;
-}
-
-.social-icon.dc {
-  color: #5bcd74;
-}
-
-@keyframes slideInUp {
-  from {
-    transform: translateY(10rpx);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
+.social-text {
+  font-size: 28rpx;
+  font-weight: 500;
+  color: #0a0a0a;
 }
 </style>

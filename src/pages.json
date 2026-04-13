@@ -1,15 +1,51 @@
 {
-	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+	"pages": [
 		{
 			"path": "pages/index/index",
 			"style": {
-				"navigationBarTitleText": "uni-app"
+				"navigationBarTitleText": "登录",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/map/map",
+			"style": {
+				"navigationBarTitleText": "旅行大富翁",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/photo/photo",
+			"style": {
+				"navigationBarTitleText": "我的照片",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/feed/feed",
+			"style": {
+				"navigationBarTitleText": "关注动态",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/property/property",
+			"style": {
+				"navigationBarTitleText": "虚拟房产",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/profile/profile",
+			"style": {
+				"navigationBarTitleText": "我的",
+				"navigationStyle": "custom"
 			}
 		}
 	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "uni-app",
+		"navigationBarTitleText": "旅行大富翁",
 		"navigationBarBackgroundColor": "#F8F8F8",
 		"backgroundColor": "#F8F8F8"
 	}
